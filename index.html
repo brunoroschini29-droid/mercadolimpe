@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <meta name="description" content="MercadoLimpe — Produtos de limpeza para casa e roupas com entrega em São Paulo."/>
+  <meta name="theme-color" content="#FFE600"/>
+  <title>MercadoLimpe — Limpeza que você vê</title>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="apple-touch-icon" href="icons/icon-192.png"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Poppins:wght@700;800&display=swap" rel="stylesheet"/>
+  <style>
+/* ── RESET & VARS ─────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --y:#FFE600;--yd:#D4C000;--g:#1B5E20;--gm:#2E7D32;--gl:#43A047;
+  --w:#fff;--bg:#F4F5F0;--brd:#E0E0D8;
+  --tx:#1A1A1A;--tx2:#555;--tx3:#999;
+  --danger:#C62828;--warn:#E65100;--info:#0D47A1;
+  --r:14px;--rs:9px;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.5}
+input,button{font-family:'Nunito',sans-serif}
+button{cursor:pointer}
+
+/* ── APP SHELL ────────────────────────────────────────────── */
+.app{max-width:430px;margin:0 auto;min-height:100vh;position:relative;overflow:hidden;background:var(--bg)}
+.screen{display:none;flex-direction:column;min-height:100vh}
+.screen.on{display:flex}
+
+/* ── LOGIN ────────────────────────────────────────────────── */
+.login-top{background:var(--y);padding:20px 16px 16px;text-align:center}
+.login-logo{font-family:'Poppins',sans-serif;font-size:26px;font-weight:800;color:var(--g);letter-spacing:-.5px}
+.login-logo em{opacity:.6;font-style:italic}
+.login-slogan{font-size:11px;color:var(--g);font-weight:700;margin-top:3px}
+.login-body{flex:1;overflow-y:auto;padding:20px 16px 30px}
+.login-body::-webkit-scrollbar{display:none}
+.login-icon{font-size:44px;text-align:center;margin-bottom:8px}
+.login-title{font-size:20px;font-weight:900;color:var(--g);text-align:center;margin-bottom:18px}
+.card{background:var(--w);border-radius:var(--r);padding:18px;margin-bottom:14px;border:1px solid var(--brd)}
+.card-label{font-size:12px;font-weight:900;color:var(--tx);margin-bottom:10px}
+.sep{text-align:center;font-size:11px;color:var(--tx3);margin:10px 0;position:relative}
+.sep::before,.sep::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--brd)}
+.sep::before{left:0}.sep::after{right:0}
+.guest-box{background:#E8F5E9;border-radius:var(--r);padding:16px;margin-bottom:14px;border:1px solid #C8E6C9}
+.guest-title{font-size:12px;font-weight:900;color:var(--g);margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.guest-sub{font-size:10px;color:var(--gm);margin-bottom:10px}
+.login-footer{font-size:10px;color:var(--tx3);text-align:center}
+.link-sm{font-size:11px;color:var(--gm);font-weight:700;cursor:pointer}
+
+/* ── INPUTS ───────────────────────────────────────────────── */
+.inp{width:100%;border:1.5px solid var(--brd);border-radius:var(--rs);padding:10px 12px;font-size:13px;outline:none;background:var(--w);color:var(--tx);margin-bottom:8px;display:block}
+.inp:focus{border-color:var(--gm)}
+.inp:last-child{margin-bottom:0}
+
+/* ── BUTTONS ──────────────────────────────────────────────── */
+.btn-primary{width:100%;background:var(--g);color:var(--y);border:none;border-radius:50px;padding:12px;font-size:14px;font-weight:900;margin-bottom:8px;display:block}
+.btn-primary:hover{background:var(--gm)}
+.btn-yellow{background:var(--y);color:var(--g)}
+.btn-yellow:hover{background:var(--yd)}
+.btn-outline{width:100%;background:transparent;color:var(--g);border:2px solid var(--g);border-radius:50px;padding:11px;font-size:13px;font-weight:800;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:7px}
+.mt8{margin-top:8px}
+
+/* ── HEADER ───────────────────────────────────────────────── */
+.hdr{background:var(--y);padding:13px 14px 0;flex-shrink:0;position:sticky;top:0;z-index:100}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.loc-label{font-size:9px;color:#555;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.loc-val{font-size:12px;font-weight:800;color:var(--g);display:flex;align-items:center;gap:2px}
+.logo-sm{font-family:'Poppins',sans-serif;font-size:18px;font-weight:800;color:var(--g);letter-spacing:-.5px}
+.logo-sm em{opacity:.6;font-style:italic}
+.hdr-acts{display:flex;gap:5px}
+.hbtn{width:34px;height:34px;border-radius:50%;background:rgba(27,94,32,.13);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--g);position:relative}
+.hbtn-admin{background:var(--g);color:var(--y)}
+.dot{position:absolute;top:-1px;right:-1px;width:14px;height:14px;border-radius:50%;background:var(--g);color:var(--y);font-size:8px;font-weight:900;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--y)}
+.srch{display:flex;align-items:center;gap:8px;background:var(--w);border-radius:50px;padding:8px 13px;margin-bottom:10px}
+.srch i{font-size:14px;color:var(--tx3)}
+.srch input{border:none;outline:none;width:100%;font-size:13px;background:transparent}
+.tabs{display:flex;gap:2px;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 12px;border-radius:50px 50px 0 0;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;color:var(--g);border:none;background:transparent;font-family:'Nunito',sans-serif}
+.tab.on{background:var(--bg)}
+
+/* ── SCROLL BODY ──────────────────────────────────────────── */
+.sbody{flex:1;overflow-y:auto;padding-bottom:70px}
+.sbody::-webkit-scrollbar{display:none}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+.hero{background:var(--g);margin:0 12px 13px;border-radius:0 0 var(--r) var(--r);padding:16px;display:flex;justify-content:space-between;align-items:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-8px;top:-18px;width:90px;height:90px;border-radius:50%;background:rgba(255,230,0,.1)}
+.h-tag{background:var(--y);color:var(--g);font-size:9px;font-weight:900;padding:2px 8px;border-radius:50px;display:inline-block;margin-bottom:6px;text-transform:uppercase}
+.hero h2{color:var(--w);font-size:15px;font-weight:900;line-height:1.25;margin-bottom:3px}
+.hero p{color:rgba(255,255,255,.68);font-size:10px;margin-bottom:10px}
+.hbtn2{background:var(--y);color:var(--g);border:none;border-radius:50px;padding:6px 14px;font-size:11px;font-weight:900}
+.hero-em{font-size:50px;z-index:1;flex-shrink:0}
+
+/* ── INFO STRIP ───────────────────────────────────────────── */
+.istrip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:0 12px 15px}
+.iitem{background:var(--w);border-radius:var(--rs);padding:9px 6px;text-align:center;border:1px solid var(--brd)}
+.iico{font-size:18px;margin-bottom:3px;display:block}
+.itx{font-size:9px;font-weight:700;color:var(--tx2);line-height:1.3}
+
+/* ── SECTION ──────────────────────────────────────────────── */
+.sec{padding:0 12px;margin-bottom:15px}
+.sec-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+.sec-tit{font-size:14px;font-weight:900;color:var(--tx)}
+.sec-all{font-size:11px;color:var(--gm);font-weight:700;cursor:pointer}
+.mb16{margin-bottom:16px}
+.mt10{margin-top:10px}
+.mt14{margin-top:14px}
+
+/* ── PROMO CARDS ──────────────────────────────────────────── */
+.hs{display:flex;gap:9px;overflow-x:auto;padding:0 12px 4px}
+.hs::-webkit-scrollbar{display:none}
+.pc{min-width:136px;border-radius:var(--r);padding:12px;cursor:pointer;flex-shrink:0}
+.pcg{background:var(--g)}.pcy{background:var(--y)}
+.pctag{font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px}
+.pcg .pctag{color:rgba(255,255,255,.55)}.pcy .pctag{color:rgba(27,94,32,.55)}
+.pctit{font-size:12px;font-weight:900;line-height:1.2}
+.pcg .pctit{color:var(--w)}.pcy .pctit{color:var(--g)}
+.pcsub{font-size:9px;margin-top:2px}
+.pcg .pcsub{color:rgba(255,255,255,.5)}.pcy .pcsub{color:rgba(27,94,32,.5)}
+.pcem{font-size:22px;margin-top:6px;display:block}
+
+/* ── STATS ────────────────────────────────────────────────── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.scard{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);text-align:center}
+.sval{font-size:20px;font-weight:900;color:var(--g);display:block}
+.slbl{font-size:10px;color:var(--tx2);font-weight:700}
+
+/* ── BRANDS ───────────────────────────────────────────────── */
+.brs{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px}
+.brs::-webkit-scrollbar{display:none}
+.bchip{background:var(--w);border:1px solid var(--brd);border-radius:50px;padding:5px 12px;font-size:10px;font-weight:800;color:var(--tx2);cursor:pointer;white-space:nowrap;flex-shrink:0}
+.bchip.on{background:var(--y);border-color:var(--yd);color:var(--g)}
+
+/* ── NEWSLETTER ───────────────────────────────────────────── */
+.nl{background:var(--g);border-radius:var(--r);padding:16px;margin:0 12px 16px;text-align:center}
+.nl-t{font-size:13px;font-weight:900;color:var(--w);margin-bottom:3px}
+.nl-s{font-size:10px;color:rgba(255,255,255,.6);margin-bottom:10px}
+.nl-r{display:flex;gap:5px}
+.nl-r input{flex:1;border:none;border-radius:50px;padding:8px 12px;font-size:12px;outline:none}
+.nl-b{background:var(--y);color:var(--g);border:none;border-radius:50px;padding:8px 12px;font-size:11px;font-weight:800;white-space:nowrap}
+
+/* ── CATEGORIES ───────────────────────────────────────────── */
+.prod-filters{padding:11px 12px 0}
+.cats{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:9px}
+.cats::-webkit-scrollbar{display:none}
+.cat{display:flex;flex-direction:column;align-items:center;gap:4px;background:var(--w);border-radius:var(--r);padding:10px 8px;min-width:62px;cursor:pointer;border:2px solid transparent;flex-shrink:0}
+.cat.on{border-color:var(--gm);background:#E8F5E9}
+.catic{font-size:20px}
+.cat span{font-size:9px;font-weight:800;color:#444;text-align:center}
+.cat.on span{color:var(--g)}
+.sbar{display:flex;gap:5px;overflow-x:auto;margin-bottom:0}
+.sbar::-webkit-scrollbar{display:none}
+.schip{padding:4px 10px;border-radius:50px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;border:1px solid var(--brd);background:var(--w);color:var(--tx2)}
+.schip.on{background:var(--g);color:var(--y);border-color:var(--g)}
+
+/* ── PRODUCT GRID ─────────────────────────────────────────── */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pcard{background:var(--w);border-radius:var(--r);padding:11px;cursor:pointer;border:1px solid var(--brd);position:relative;overflow:hidden}
+.pbg{position:absolute;top:7px;left:7px;font-size:8px;font-weight:900;padding:2px 6px;border-radius:50px;text-transform:uppercase}
+.bpromo{background:#FFF3E0;color:var(--warn)}.bnew{background:#E8F5E9;color:var(--g)}.btop{background:#E3F2FD;color:var(--info)}
+.pfav{position:absolute;top:7px;right:7px;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.9);border:none;display:flex;align-items:center;justify-content:center;font-size:13px}
+.pem{font-size:42px;text-align:center;margin:13px 0 5px;display:block}
+.pnm{font-size:11px;font-weight:800;color:var(--tx);margin-bottom:1px;line-height:1.3}
+.pbr{font-size:9px;color:var(--tx3);margin-bottom:3px}
+.prat{display:flex;align-items:center;gap:2px;margin-bottom:5px}
+.pst{font-size:10px;color:#FFB300}
+.prv{font-size:9px;color:var(--tx3)}
+.pold{font-size:8px;color:var(--tx3);text-decoration:line-through}
+.ppr{font-size:14px;font-weight:900;color:var(--g)}
+.pfoot{display:flex;align-items:center;justify-content:space-between;margin-top:5px}
+.addbtn{width:26px;height:26px;border-radius:50%;background:var(--g);border:none;color:var(--y);font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* ── COMBOS ───────────────────────────────────────────────── */
+.ccard{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);display:flex;gap:9px;align-items:center;margin-bottom:8px}
+.cinfo{flex:1}
+.cnm{font-size:12px;font-weight:800;color:var(--tx)}
+.cds{font-size:9px;color:var(--tx3);margin-bottom:3px}
+.cpr{display:flex;align-items:center;gap:6px}
+.cold{font-size:10px;color:var(--tx3);text-decoration:line-through}
+.cnew{font-size:14px;font-weight:900;color:var(--g)}
+.csv{font-size:8px;background:#E8F5E9;color:var(--g);padding:2px 5px;border-radius:50px;font-weight:800}
+.cadd{background:var(--g);color:var(--y);border:none;border-radius:50px;padding:6px 12px;font-size:10px;font-weight:800;flex-shrink:0}
+
+/* ── TIPS ─────────────────────────────────────────────────── */
+.tcard{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);display:flex;gap:10px;margin-bottom:7px}
+.tic{font-size:22px;flex-shrink:0}
+.ttit{font-size:12px;font-weight:800;color:var(--tx);margin-bottom:2px}
+.ttx{font-size:10px;color:var(--tx2);line-height:1.5}
+
+/* ── REVIEWS ──────────────────────────────────────────────── */
+.rev-summary{background:var(--g);border-radius:var(--r);padding:14px;text-align:center;margin-bottom:12px}
+.rev-num{font-size:32px;font-weight:900;color:var(--y)}
+.rev-stars{font-size:16px;color:var(--y);margin-bottom:3px}
+.rev-count{font-size:10px;color:rgba(255,255,255,.6)}
+.rcard{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);margin-bottom:7px}
+.rhdr{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.rav{width:34px;height:34px;border-radius:50%;background:var(--g);color:var(--y);font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rnm{font-size:12px;font-weight:800;color:var(--tx)}
+.rdt{font-size:9px;color:var(--tx3)}
+.rst{font-size:11px;color:#FFB300;margin-bottom:5px}
+.rtx{font-size:11px;color:var(--tx2);line-height:1.5}
+.rpr{font-size:9px;color:var(--gm);font-weight:700;margin-top:5px}
+
+/* ── ORDERS ───────────────────────────────────────────────── */
+.ocard{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);margin-bottom:9px}
+.ohdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.onum{font-size:11px;font-weight:800;color:var(--tx)}
+.ost{font-size:9px;font-weight:800;padding:2px 8px;border-radius:50px}
+.sem{background:#E8F5E9;color:var(--g)}.spr{background:#FFF3E0;color:var(--warn)}.sde{background:#E3F2FD;color:var(--info)}
+.odt{font-size:10px;color:var(--tx3);margin-bottom:5px}
+.oit{font-size:11px;color:var(--tx2);margin-bottom:3px}
+.otot{font-size:13px;font-weight:900;color:var(--g)}
+.ofr{font-size:10px;color:var(--tx2);margin-top:1px}
+.otrk{display:flex;margin-top:9px}
+.trst{flex:1;text-align:center;position:relative}
+.trst::before{content:'';position:absolute;top:7px;left:-50%;right:50%;height:2px;background:var(--brd)}
+.trst:first-child::before{display:none}
+.trst.done::before{background:var(--g)}
+.trdot{width:16px;height:16px;border-radius:50%;border:2px solid var(--brd);background:var(--bg);margin:0 auto 3px;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;font-size:7px}
+.trdot.done{background:var(--g);border-color:var(--g);color:var(--y)}
+.trdot.curr{background:var(--y);border-color:var(--yd)}
+.trlbl{font-size:8px;color:var(--tx3);font-weight:700}
+.trst.done .trlbl{color:var(--g)}
+
+/* ── BOTTOM NAV ───────────────────────────────────────────── */
+.bnav{position:sticky;bottom:0;background:var(--w);border-top:1px solid var(--brd);display:flex;justify-content:space-around;padding:9px 0 13px;flex-shrink:0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:var(--tx3);font-size:9px;font-weight:800;border:none;background:transparent;min-width:48px}
+.ni.on{color:var(--g)}
+.ni i{font-size:20px}
+
+/* ── CART DRAWER ──────────────────────────────────────────── */
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300}
+.cov.open{display:block}
+.cdrw{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;max-height:82vh;background:var(--w);border-radius:18px 18px 0 0;z-index:301;display:none;flex-direction:column}
+.cdrw.open{display:flex}
+.cbody{overflow-y:auto;padding:0 14px 14px;flex:1}
+.cbody::-webkit-scrollbar{display:none}
+.cdh{width:36px;height:4px;background:#ddd;border-radius:4px;margin:11px auto 12px}
+.cdtit{font-size:15px;font-weight:900;color:var(--tx);padding:0 14px;margin-bottom:12px}
+.ci{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid var(--brd)}
+.ci:last-child{border-bottom:none}
+.ciem{font-size:28px}
+.cii{flex:1}
+.cinm{font-size:11px;font-weight:800;color:var(--tx);line-height:1.3}
+.cibr{font-size:9px;color:var(--tx3)}
+.cipr{font-size:12px;color:var(--g);font-weight:900}
+.qty{display:flex;align-items:center;gap:5px}
+.qb{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--gm);background:transparent;color:var(--gm);font-size:14px;display:flex;align-items:center;justify-content:center;font-weight:900}
+.qn{font-size:12px;font-weight:900;color:var(--tx);min-width:14px;text-align:center}
+.ecart{text-align:center;padding:36px 0;color:var(--tx3)}
+.ecic{font-size:44px;margin-bottom:7px}
+
+/* ── FRETE BOX ────────────────────────────────────────────── */
+.fbox{background:var(--bg);border-radius:var(--rs);padding:11px;margin-top:10px;border:1.5px solid var(--brd)}
+.fbox-tit{font-size:11px;font-weight:900;color:var(--tx);margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.frete-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.fop{border:2px solid var(--brd);border-radius:var(--r);padding:10px;cursor:pointer;background:var(--w);text-align:left}
+.fop.on{border-color:var(--g);background:#E8F5E9}
+.fop-ic{font-size:18px;margin-bottom:3px;display:block}
+.fop-tit{font-size:11px;font-weight:900;color:var(--tx);margin-bottom:1px}
+.fop.on .fop-tit{color:var(--g)}
+.fop-sub{font-size:9px;color:var(--tx3)}
+.fop.on .fop-sub{color:var(--gm)}
+.frow{display:flex;gap:7px;align-items:flex-end;margin-bottom:7px}
+.ffield{flex:1}
+.flbl{font-size:9px;font-weight:800;color:var(--tx2);margin-bottom:3px}
+.finp{width:100%;border:1.5px solid var(--brd);border-radius:var(--rs);padding:7px 9px;font-size:12px;font-weight:700;outline:none;background:var(--w);color:var(--tx)}
+.finp:focus{border-color:var(--gm)}
+.finp[readonly]{background:#f6f6f2;color:var(--tx2)}
+.fcalc{background:var(--g);color:var(--y);border:none;border-radius:var(--rs);padding:0 11px;font-size:11px;font-weight:900;white-space:nowrap;height:34px}
+.fres{border-radius:var(--rs);padding:9px 11px;font-size:11px;font-weight:800;display:none;line-height:1.5;margin-top:8px}
+.fok{background:#E8F5E9;color:var(--g);display:block}
+.ferr{background:#FFEBEE;color:var(--danger);display:block}
+.breakdown{background:var(--w);border-radius:var(--rs);border:1px solid var(--brd);padding:10px 12px;margin-top:8px;display:none}
+.breakdown.show{display:block}
+.bd-tit{font-size:9px;font-weight:900;color:var(--tx3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px}
+.bd-row{display:flex;justify-content:space-between;align-items:center;font-size:10px;color:var(--tx2);padding:3px 0;border-bottom:1px dashed var(--brd)}
+.bd-row:last-child{border-bottom:none;font-weight:900;color:var(--g);font-size:12px;padding-top:6px;margin-top:2px}
+.bd-pill{background:#E8F5E9;color:var(--g);font-size:9px;font-weight:900;padding:2px 7px;border-radius:50px}
+.flex-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;flex-wrap:wrap;gap:5px}
+.flex-badge{background:var(--g);color:var(--y);font-size:9px;font-weight:900;padding:3px 9px;border-radius:50px}
+.prazo-tag{display:flex;align-items:center;gap:4px;background:var(--w);border:1px solid var(--brd);border-radius:50px;padding:3px 9px}
+.prazo-tag i{font-size:12px;color:var(--gm)}
+.prazo-tag span{font-size:9px;font-weight:800;color:var(--tx2)}
+.cutoff-strip{border-radius:var(--rs);padding:8px 10px;margin-bottom:8px;display:flex;align-items:flex-start;gap:7px}
+.cutoff-strip.ok{background:#E8F5E9;border:1px solid #C8E6C9}
+.cutoff-strip.late{background:#FFF3E0;border:1px solid #FFCC80}
+.cutoff-ic{font-size:16px;flex-shrink:0}
+.cutoff-title{font-size:11px;font-weight:900;margin-bottom:1px}
+.cutoff-strip.ok .cutoff-title{color:var(--g)}
+.cutoff-strip.late .cutoff-title{color:var(--warn)}
+.cutoff-sub{font-size:9px;line-height:1.4}
+.cutoff-strip.ok .cutoff-sub{color:var(--gm)}
+.cutoff-strip.late .cutoff-sub{color:var(--warn)}
+.info-link{background:transparent;border:none;color:var(--gm);font-size:10px;font-weight:800;margin-top:8px;display:flex;align-items:center;gap:4px;padding:0}
+
+/* ── CART SUMMARY ─────────────────────────────────────────── */
+.csum-box{background:var(--g);border-radius:var(--r);padding:12px;margin-top:10px}
+.csum-row{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.7);margin-bottom:4px;align-items:center}
+.csum-row.fin{font-size:14px;font-weight:900;color:var(--y);margin-top:7px;border-top:1px solid rgba(255,255,255,.2);padding-top:7px;margin-bottom:0}
+.csum-btn{width:100%;background:var(--y);color:var(--g);border:none;border-radius:50px;padding:12px;font-size:14px;font-weight:900;margin-top:10px}
+.csum-btn:disabled{opacity:.3;cursor:not-allowed}
+
+/* ── CHECKOUT ─────────────────────────────────────────────── */
+.ck-wrap{flex:1;overflow-y:auto;padding:14px}
+.ck-wrap::-webkit-scrollbar{display:none}
+.ck-hdr{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ck-back{width:34px;height:34px;border-radius:50%;background:var(--w);border:1px solid var(--brd);display:flex;align-items:center;justify-content:center;color:var(--tx);font-size:18px}
+.ck-title{font-size:16px;font-weight:900;color:var(--tx)}
+.ck-section{background:var(--w);border-radius:var(--r);padding:14px;margin-bottom:10px;border:1px solid var(--brd)}
+.ck-sec-tit{font-size:12px;font-weight:900;color:var(--tx);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.ck-row{display:flex;gap:8px}
+.ck-row .inp{flex:1}
+.pay-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.pay-opt{border:2px solid var(--brd);border-radius:var(--rs);padding:12px;text-align:center;cursor:pointer}
+.pay-opt.on{border-color:var(--g);background:#E8F5E9}
+.pay-opt i{font-size:22px;color:var(--gm);display:block;margin-bottom:4px}
+.pay-opt span{font-size:10px;font-weight:800;color:var(--tx2)}
+.pay-opt.on span{color:var(--g)}
+.pix-box{background:#E8F5E9;border-radius:var(--rs);padding:12px;text-align:center}
+.pix-key{font-size:13px;font-weight:900;color:var(--g);margin-bottom:3px}
+.pix-sub{font-size:10px;color:var(--gm)}
+.ck-total{background:var(--g);border-radius:var(--r);padding:13px;margin-bottom:10px}
+.ck-tr{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.7);margin-bottom:4px;align-items:center}
+.ck-tr.fin{font-size:15px;font-weight:900;color:var(--y);margin-top:7px;border-top:1px solid rgba(255,255,255,.2);padding-top:7px;margin-bottom:0}
+
+/* ── SUCCESS ──────────────────────────────────────────────── */
+.success-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:32px 24px;text-align:center}
+.succ-ic{font-size:64px;margin-bottom:12px}
+.succ-h{font-size:20px;font-weight:900;color:var(--g);margin-bottom:6px}
+.succ-p{font-size:12px;color:var(--tx2);margin-bottom:8px;line-height:1.6}
+.succ-num{font-size:14px;font-weight:900;color:var(--g);background:#E8F5E9;padding:8px 16px;border-radius:50px;margin-bottom:8px;display:inline-block}
+.succ-pay{font-size:11px;color:var(--tx2);margin-bottom:20px}
+
+/* ── ADMIN ────────────────────────────────────────────────── */
+.adm-hdr{background:var(--g);padding:16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.adm-tit{font-size:15px;font-weight:900;color:var(--y)}
+.adm-sub{font-size:10px;color:rgba(255,255,255,.6);margin-top:1px}
+.adm-exit{background:rgba(255,230,0,.2);border:none;border-radius:50px;padding:5px 12px;font-size:10px;font-weight:800;color:var(--y)}
+.adm-body{flex:1;overflow-y:auto;padding:12px}
+.adm-body::-webkit-scrollbar{display:none}
+.adm-kpis{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px}
+.kpi{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);text-align:center}
+.kpi-val{font-size:18px;font-weight:900;color:var(--g);display:block}
+.kpi-lbl{font-size:9px;color:var(--tx2);font-weight:700}
+.adm-sec{background:var(--w);border-radius:var(--r);padding:12px;border:1px solid var(--brd);margin-bottom:10px}
+.adm-sec-tit{font-size:12px;font-weight:900;color:var(--tx);margin-bottom:10px}
+.ord-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--brd)}
+.ord-row:last-child{border-bottom:none}
+.ord-info{flex:1}
+.ord-nm{font-size:11px;font-weight:800;color:var(--tx)}
+.ord-dt2{font-size:9px;color:var(--tx3)}
+.ord-wa{background:#25D366;color:var(--w);border:none;border-radius:50px;padding:4px 9px;font-size:9px;font-weight:800;display:flex;align-items:center;gap:3px}
+.cli-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--brd)}
+.cli-row:last-child{border-bottom:none}
+.cli-av{width:30px;height:30px;border-radius:50%;background:var(--g);color:var(--y);font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cli-info{flex:1}
+.cli-nm{font-size:11px;font-weight:800;color:var(--tx)}
+.cli-wa{font-size:9px;color:var(--tx3)}
+.cli-type{font-size:8px;font-weight:800;padding:2px 6px;border-radius:50px}
+.ctcad{background:#E8F5E9;color:var(--g)}.ctgue{background:#FFF3E0;color:var(--warn)}
+.prod-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--brd)}
+.prod-row:last-child{border-bottom:none}
+.prod-em2{font-size:22px}
+.prod-info{flex:1}
+.prod-nm2{font-size:11px;font-weight:800;color:var(--tx)}
+.prod-st{font-size:9px;font-weight:700}
+.prod-act{display:flex;gap:5px}
+.prod-btn{border:1px solid var(--brd);background:transparent;border-radius:50px;padding:3px 8px;font-size:9px;font-weight:700;color:var(--tx2)}
+
+/* ── MODAL ────────────────────────────────────────────────── */
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:flex-end;justify-content:center}
+.modal-ov.open{display:flex}
+.modal{background:var(--w);border-radius:20px 20px 0 0;width:100%;max-width:430px;max-height:85vh;display:flex;flex-direction:column}
+.modal-hdr{padding:15px 16px 12px;border-bottom:1px solid var(--brd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.modal-tit{font-size:15px;font-weight:900;color:var(--tx)}
+.modal-close{width:30px;height:30px;border-radius:50%;background:var(--bg);border:none;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--tx2)}
+.modal-body{overflow-y:auto;padding:14px 16px 24px;flex:1}
+.modal-body::-webkit-scrollbar{display:none}
+.info-sec{margin-bottom:18px}
+.info-sec:last-child{margin-bottom:0}
+.info-sec-hdr{display:flex;align-items:center;gap:8px;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--y)}
+.info-sec-ic{font-size:20px}
+.info-sec-tit{font-size:13px;font-weight:900;color:var(--g)}
+.info-sec-sub{font-size:10px;color:var(--tx2)}
+.info-card{background:var(--bg);border-radius:var(--rs);padding:11px 13px;margin-bottom:7px;border-left:3px solid var(--g)}
+.info-card-tit{font-size:11px;font-weight:900;color:var(--g);margin-bottom:4px}
+.info-card-txt{font-size:10px;color:var(--tx2);line-height:1.7}
+.info-card .hl{font-weight:900;color:var(--g)}
+.example-box{background:#E8F5E9;border-radius:var(--rs);padding:9px 11px;margin-top:6px}
+.ex-tit{font-size:9px;font-weight:900;color:var(--gm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+.ex-row{display:flex;justify-content:space-between;font-size:10px;color:var(--tx2);margin-bottom:2px}
+.ex-row:last-child{margin-bottom:0;font-weight:900;color:var(--g);border-top:1px solid #C8E6C9;padding-top:4px;margin-top:4px}
+.hora-card{background:var(--g);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.hora-ic{font-size:26px}
+.hora-val{font-size:20px;font-weight:900;color:var(--y)}
+.hora-sub{font-size:10px;color:rgba(255,255,255,.7);margin-top:1px}
+.faq-item{border:1px solid var(--brd);border-radius:var(--rs);margin-bottom:6px;overflow:hidden}
+.faq-q{padding:10px 12px;font-size:11px;font-weight:800;color:var(--tx);cursor:pointer;display:flex;justify-content:space-between;align-items:center;background:var(--w);border:none;width:100%;text-align:left}
+.faq-q i{font-size:14px;color:var(--tx3);transition:transform .2s;flex-shrink:0}
+.faq-q.open i{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 12px 10px;font-size:10px;color:var(--tx2);line-height:1.7}
+.faq-a.open{display:block}
+
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ── TELA: LOGIN ─────────────────────────────────── -->
+  <div class="screen on" id="s-login">
+    <div class="login-top">
+      <div class="login-logo">MERCADO<em>LIMPE</em></div>
+      <div class="login-slogan">Limpeza que você vê, resultado que você confia!</div>
+    </div>
+    <div class="login-body">
+      <div class="login-icon">🧹</div>
+      <h1 class="login-title">Bem-vindo!</h1>
+
+      <div class="card">
+        <div class="card-label">Entrar com e-mail</div>
+        <input class="inp" type="email" placeholder="seu@email.com" autocomplete="email"/>
+        <input class="inp" type="password" placeholder="Senha" autocomplete="current-password"/>
+        <span class="link-sm" style="text-align:right;display:block;margin-bottom:10px">Esqueci a senha</span>
+        <button class="btn-primary" onclick="goApp()">Entrar</button>
+        <div class="sep">ou</div>
+        <button class="btn-outline" onclick="goApp()">
+          <span style="font-weight:900;color:#4285F4;font-size:15px">G</span> Continuar com Google
+        </button>
+        <button class="btn-outline" onclick="goApp()" style="border-color:#1877F2;color:#1877F2">
+          <i class="ti ti-brand-facebook"></i> Continuar com Facebook
+        </button>
+      </div>
+
+      <div class="guest-box">
+        <div class="guest-title"><i class="ti ti-shopping-bag"></i> Comprar sem cadastro</div>
+        <div class="guest-sub">Rápido! Só precisamos do seu nome e WhatsApp.</div>
+        <input class="inp" id="g-nome" placeholder="Seu nome completo"/>
+        <input class="inp" id="g-wa" type="tel" placeholder="WhatsApp (11) 99999-9999"/>
+        <button class="btn-primary" onclick="goAppGuest()">Continuar como convidado</button>
+      </div>
+
+      <div class="login-footer">
+        Não tem conta? <span class="link-sm" onclick="">Cadastre-se grátis</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── TELA: APP PRINCIPAL ────────────────────────── -->
+  <div class="screen" id="s-main">
+    <header class="hdr">
+      <div class="hdr-top">
+        <div class="loc">
+          <div class="loc-label">Entregar em</div>
+          <div class="loc-val">São Paulo, SP <i class="ti ti-chevron-down"></i></div>
+        </div>
+        <div class="logo-sm">MERCADO<em>LIMPE</em></div>
+        <div class="hdr-acts">
+          <button class="hbtn" onclick="openCart()" aria-label="Carrinho">
+            <i class="ti ti-shopping-cart"></i>
+            <span class="dot" id="cc">0</span>
+          </button>
+          <button class="hbtn hbtn-admin" onclick="go('s-admin')" aria-label="Painel admin">
+            <i class="ti ti-settings"></i>
+          </button>
+        </div>
+      </div>
+      <div class="srch">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Buscar produtos, marcas..." id="search-inp" oninput="searchProds(this.value)"/>
+        <i class="ti ti-adjustments-horizontal" style="cursor:pointer"></i>
+      </div>
+      <div class="tabs" id="main-tabs">
+        <button class="tab on" onclick="tab('home',this)">Início</button>
+        <button class="tab" onclick="tab('products',this)">Produtos</button>
+        <button class="tab" onclick="tab('combos',this)">Combos</button>
+        <button class="tab" onclick="tab('tips',this)">Dicas</button>
+        <button class="tab" onclick="tab('reviews',this)">Avaliações</button>
+        <button class="tab" onclick="tab('orders',this)">Pedidos</button>
+      </div>
+    </header>
+
+    <main class="sbody" id="main-body">
+      <div id="tab-home">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="h-tag">Promoção da semana</div>
+            <h2>Deixe sua casa brilhando!</h2>
+            <p>Até 40% off em produtos selecionados</p>
+            <button class="hbtn2" onclick="tab('products',document.querySelectorAll('.tab')[1])">Ver ofertas</button>
+          </div>
+          <div class="hero-em">🧹</div>
+        </div>
+
+        <div class="istrip">
+          <div class="iitem"><span class="iico">🚚</span><div class="itx">Frete por distância</div></div>
+          <div class="iitem"><span class="iico">🔄</span><div class="itx">Troca em 7 dias</div></div>
+          <div class="iitem"><span class="iico">🔒</span><div class="itx">100% seguro</div></div>
+        </div>
+
+        <div class="sec"><div class="sec-hdr"><span class="sec-tit">Destaques</span></div></div>
+        <div class="hs mb16">
+          <div class="pc pcg"><div class="pctag">Roupas</div><div class="pctit">Leve 3, pague 2</div><div class="pcsub">Amaciantes e sabões</div><span class="pcem">👕</span></div>
+          <div class="pc pcy"><div class="pctag">Casa</div><div class="pctit">Kit limpeza completo</div><div class="pcsub">Economize até R$28</div><span class="pcem">✨</span></div>
+          <div class="pc pcg"><div class="pctag">Cozinha</div><div class="pctit">Detergentes em oferta</div><div class="pcsub">A partir de R$3,90</div><span class="pcem">🍽️</span></div>
+          <div class="pc pcy"><div class="pctag">Eco</div><div class="pctit">Linha sustentável</div><div class="pcsub">Refis com desconto</div><span class="pcem">🌱</span></div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-hdr"><span class="sec-tit">Em números</span></div>
+          <div class="sgrid">
+            <div class="scard"><span class="sval">12.4k</span><span class="slbl">Clientes satisfeitos</span></div>
+            <div class="scard"><span class="sval">4.8★</span><span class="slbl">Avaliação média</span></div>
+            <div class="scard"><span class="sval">300+</span><span class="slbl">Produtos</span></div>
+            <div class="scard"><span class="sval">30 kg</span><span class="slbl">Limite por frete</span></div>
+          </div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-hdr"><span class="sec-tit">Marcas parceiras</span><span class="sec-all">Ver todas</span></div>
+          <div class="brs">
+            <div class="bchip on">Todas</div><div class="bchip">Omo</div><div class="bchip">Ariel</div>
+            <div class="bchip">Comfort</div><div class="bchip">Pinho Sol</div><div class="bchip">Mr. Músculo</div>
+            <div class="bchip">Vanish</div><div class="bchip">Scotch-Brite</div>
+          </div>
+        </div>
+
+        <div class="nl">
+          <div class="nl-t">Receba ofertas exclusivas</div>
+          <div class="nl-s">Cadastre-se e ganhe 10% na primeira compra</div>
+          <div class="nl-r"><input type="email" placeholder="seu@email.com"/><button class="nl-b">Quero!</button></div>
+        </div>
+      </div>
+
+      <div id="tab-products" style="display:none">
+        <div class="prod-filters">
+          <div class="cats" id="cats"></div>
+          <div class="sbar" id="sbar">
+            <button class="schip on" onclick="srt(this,'rel')">Relevância</button>
+            <button class="schip" onclick="srt(this,'asc')">Menor preço</button>
+            <button class="schip" onclick="srt(this,'desc')">Maior preço</button>
+            <button class="schip" onclick="srt(this,'rat')">Mais avaliados</button>
+            <button class="schip" onclick="srt(this,'promo')">Em promoção</button>
+          </div>
+        </div>
+        <div class="sec mt10"><div class="pgrid" id="pgrid"></div></div>
+      </div>
+
+      <div id="tab-combos" style="display:none">
+        <div class="sec mt14"><div class="sec-hdr"><span class="sec-tit">Kits & Combos</span></div><div id="combos-el"></div></div>
+      </div>
+
+      <div id="tab-tips" style="display:none">
+        <div class="sec mt14"><div class="sec-hdr"><span class="sec-tit">Dicas de limpeza</span></div><div id="tips-el"></div></div>
+      </div>
+
+      <div id="tab-reviews" style="display:none">
+        <div class="sec mt14">
+          <div class="rev-summary">
+            <div class="rev-num">4.8</div>
+            <div class="rev-stars">★★★★★</div>
+            <div class="rev-count">Baseado em 1.243 avaliações</div>
+          </div>
+          <div id="reviews-el"></div>
+        </div>
+      </div>
+
+      <div id="tab-orders" style="display:none">
+        <div class="sec mt14"><div class="sec-hdr"><span class="sec-tit">Meus pedidos</span></div><div id="orders-el"></div></div>
+      </div>
+    </main>
+
+    <nav class="bnav">
+      <button class="ni on" id="ni-home" onclick="tab('home',null,'ni-home')"><i class="ti ti-home"></i>Início</button>
+      <button class="ni" id="ni-products" onclick="tab('products',null,'ni-products')"><i class="ti ti-basket"></i>Produtos</button>
+      <button class="ni" id="ni-combos" onclick="tab('combos',null,'ni-combos')"><i class="ti ti-gift"></i>Combos</button>
+      <button class="ni" id="ni-orders" onclick="tab('orders',null,'ni-orders')"><i class="ti ti-clipboard-list"></i>Pedidos</button>
+      <button class="ni" id="ni-profile" onclick="go('s-login')"><i class="ti ti-user"></i>Perfil</button>
+    </nav>
+  </div>
+
+  <!-- ── TELA: CHECKOUT ─────────────────────────────── -->
+  <div class="screen" id="s-checkout">
+    <div class="ck-wrap">
+      <div class="ck-hdr">
+        <button class="ck-back" onclick="go('s-main')" aria-label="Voltar"><i class="ti ti-arrow-left"></i></button>
+        <div class="ck-title">Finalizar Pedido</div>
+      </div>
+
+      <div class="ck-section">
+        <div class="ck-sec-tit"><i class="ti ti-user" style="color:var(--gm)"></i> Dados de entrega</div>
+        <input class="inp" id="ck-nome" placeholder="Nome completo"/>
+        <div class="ck-row">
+          <input class="inp" id="ck-wa" type="tel" placeholder="WhatsApp (11) 99999-9999"/>
+          <input class="inp" id="ck-email" type="email" placeholder="E-mail (opcional)"/>
+        </div>
+        <input class="inp" id="ck-end" placeholder="Endereço completo"/>
+      </div>
+
+      <div class="ck-section">
+        <div class="ck-sec-tit"><i class="ti ti-truck" style="color:var(--gm)"></i> Tipo de entrega</div>
+        <div class="frete-opts">
+          <div class="fop on" id="fop-propria" onclick="selFrete('propria')">
+            <span class="fop-ic">🛵</span>
+            <div class="fop-tit">Entrega própria</div>
+            <div class="fop-sub">Até 8,5 km</div>
+          </div>
+          <div class="fop" id="fop-flex" onclick="selFrete('flex')">
+            <span class="fop-ic">📦</span>
+            <div class="fop-tit">Entrega Flex</div>
+            <div class="fop-sub">Grande SP</div>
+          </div>
+        </div>
+
+        <div id="box-propria">
+          <div class="fbox">
+            <div class="frow">
+              <div class="ffield"><div class="flbl">Distância (km)</div><input class="finp" type="number" id="km-inp" min="0.1" max="8.5" step="0.1" placeholder="Ex: 3.5"/></div>
+              <div class="ffield"><div class="flbl">Peso</div><input class="finp" id="peso-inp" readonly/></div>
+              <button class="fcalc" onclick="calcPropria()">Calcular</button>
+            </div>
+            <div class="fres" id="res-propria"></div>
+            <div class="breakdown" id="bd-propria"><div class="bd-tit">Como foi calculado</div><div id="bd-propria-rows"></div></div>
+          </div>
+        </div>
+
+        <div id="box-flex" style="display:none">
+          <div class="fbox">
+            <div class="flex-header">
+              <span class="flex-badge">FLEX · Grande São Paulo</span>
+              <div class="prazo-tag"><i class="ti ti-calendar-check"></i><span id="prazo-label">Próximo dia útil</span></div>
+            </div>
+            <div id="cutoff-strip"></div>
+            <div class="fres" id="res-flex"></div>
+            <div class="breakdown" id="bd-flex"><div class="bd-tit">Como foi calculado</div><div id="bd-flex-rows"></div></div>
+          </div>
+        </div>
+
+        <button class="info-link" onclick="openInfo()"><i class="ti ti-info-circle"></i> Ver regras e prazos de entrega</button>
+      </div>
+
+      <div class="ck-section">
+        <div class="ck-sec-tit"><i class="ti ti-credit-card" style="color:var(--gm)"></i> Forma de pagamento</div>
+        <div class="pay-opts">
+          <div class="pay-opt on" id="pay-pix" onclick="selPay('pix')">
+            <i class="ti ti-qrcode"></i><span>Pix</span>
+          </div>
+          <div class="pay-opt" id="pay-card" onclick="selPay('card')">
+            <i class="ti ti-credit-card"></i><span>Cartão</span>
+          </div>
+        </div>
+        <div id="pay-pix-box" class="pix-box">
+          <div class="pix-key">Chave Pix: (11) 99999-0000</div>
+          <div class="pix-sub">Após o pedido, envie o comprovante pelo WhatsApp</div>
+        </div>
+        <div id="pay-card-box" style="display:none">
+          <input class="inp" placeholder="Número do cartão"/>
+          <div class="ck-row">
+            <input class="inp" placeholder="Validade MM/AA"/>
+            <input class="inp" placeholder="CVV" style="max-width:80px"/>
+          </div>
+          <input class="inp" placeholder="Nome no cartão"/>
+        </div>
+      </div>
+
+      <div class="ck-total">
+        <div class="ck-tr"><span>Subtotal</span><span id="ck-sub-val">—</span></div>
+        <div class="ck-tr"><span>Modalidade</span><span id="ck-tipo-val">—</span></div>
+        <div class="ck-tr"><span id="ck-prazo-lbl" style="display:none">Prazo estimado</span><span id="ck-prazo-val"></span></div>
+        <div class="ck-tr"><span>Frete</span><span id="ck-frete-val">A calcular</span></div>
+        <div class="ck-tr fin"><span>Total</span><span id="ck-total-val">—</span></div>
+      </div>
+      <button class="btn-primary btn-yellow" id="ck-submit" onclick="submitOrder()" disabled>Confirmar pedido</button>
+    </div>
+  </div>
+
+  <!-- ── TELA: SUCESSO ──────────────────────────────── -->
+  <div class="screen" id="s-success">
+    <div class="success-wrap">
+      <div class="succ-ic">🎉</div>
+      <h2 class="succ-h">Pedido confirmado!</h2>
+      <p class="succ-p">Seu pedido foi registrado com sucesso.<br/>Em breve entraremos em contato pelo WhatsApp.</p>
+      <div class="succ-num" id="succ-num">#ML-00001</div>
+      <p class="succ-pay">Pagamento: <strong id="succ-pay-val">Pix</strong></p>
+      <button class="btn-primary" onclick="go('s-main')">Continuar comprando</button>
+      <button class="btn-outline mt8" onclick="tab('orders',null,'ni-orders');go('s-main')">Ver meus pedidos</button>
+    </div>
+  </div>
+
+  <!-- ── TELA: ADMIN ────────────────────────────────── -->
+  <div class="screen" id="s-admin">
+    <div class="adm-hdr">
+      <div>
+        <div class="adm-tit">Painel Admin</div>
+        <div class="adm-sub">MercadoLimpe — visão geral</div>
+      </div>
+      <button class="adm-exit" onclick="go('s-main')">Sair do admin</button>
+    </div>
+    <div class="adm-body">
+      <div class="adm-kpis">
+        <div class="kpi"><span class="kpi-val">R$4.280</span><span class="kpi-lbl">Vendas este mês</span></div>
+        <div class="kpi"><span class="kpi-val">37</span><span class="kpi-lbl">Pedidos este mês</span></div>
+        <div class="kpi"><span class="kpi-val">124</span><span class="kpi-lbl">Clientes cadastrados</span></div>
+        <div class="kpi"><span class="kpi-val">4.8★</span><span class="kpi-lbl">Avaliação média</span></div>
+      </div>
+      <div class="adm-sec">
+        <div class="adm-sec-tit">Pedidos recentes</div>
+        <div id="adm-orders"></div>
+      </div>
+      <div class="adm-sec">
+        <div class="adm-sec-tit">Clientes</div>
+        <div id="adm-clients"></div>
+      </div>
+      <div class="adm-sec">
+        <div class="adm-sec-tit">Produtos</div>
+        <div id="adm-prods"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CART OVERLAY ───────────────────────────────── -->
+  <div class="cov" id="cov" onclick="closeCart()"></div>
+  <div class="cdrw" id="cdrw">
+    <div class="cdh"></div>
+    <div class="cdtit">Meu Carrinho</div>
+    <div class="cbody">
+      <div id="citems"></div>
+      <div class="fbox" id="fbox" style="display:none">
+        <div class="fbox-tit"><i class="ti ti-truck" style="font-size:15px;color:var(--gm)"></i> Calcular frete</div>
+        <div class="frete-opts">
+          <div class="fop on" id="cart-fop-propria" onclick="cartSelFrete('propria')"><span class="fop-ic">🛵</span><div class="fop-tit">Própria</div><div class="fop-sub">Até 8,5 km</div></div>
+          <div class="fop" id="cart-fop-flex" onclick="cartSelFrete('flex')"><span class="fop-ic">📦</span><div class="fop-tit">Flex</div><div class="fop-sub">Grande SP</div></div>
+        </div>
+        <div id="cart-box-propria">
+          <div class="frow">
+            <div class="ffield"><div class="flbl">Distância (km)</div><input class="finp" type="number" id="cart-km" min="0.1" max="8.5" step="0.1" placeholder="Ex: 3.5"/></div>
+            <div class="ffield"><div class="flbl">Peso</div><input class="finp" id="cart-peso" readonly/></div>
+            <button class="fcalc" onclick="cartCalcPropria()">Calcular</button>
+          </div>
+        </div>
+        <div id="cart-box-flex" style="display:none">
+          <div class="flex-header"><span class="flex-badge">FLEX</span><div class="prazo-tag"><i class="ti ti-calendar-check"></i><span id="cart-prazo">Próximo dia útil</span></div></div>
+          <div id="cart-cutoff"></div>
+        </div>
+        <div class="fres" id="cart-fres"></div>
+        <div class="breakdown" id="cart-bd"><div class="bd-tit">Como foi calculado</div><div id="cart-bd-rows"></div></div>
+        <button class="info-link" onclick="openInfo()"><i class="ti ti-info-circle"></i> Ver regras de entrega</button>
+      </div>
+      <div id="csum"></div>
+    </div>
+  </div>
+
+  <!-- ── MODAL INFORMAÇÕES ──────────────────────────── -->
+  <div class="modal-ov" id="modal-ov" onclick="closeInfo(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-hdr">
+        <div class="modal-tit">Informações de entrega</div>
+        <button class="modal-close" onclick="closeInfo()" aria-label="Fechar"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body" id="modal-body-content"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+// ── PRODUTOS ──────────────────────────────────────────────
+const PRODS = [
+  {id:1,nm:'Detergente Neutro Concentrado 500ml',br:'MercadoLimpe',pr:8.90,old:12.90,em:'🧴',bg:'promo',bt:'−31%',cat:'cozinha',rat:4.8,rv:312,un:'500ml',kg:0.6},
+  {id:2,nm:'Sabão em Pó Máquina 1,5kg',br:'Omo',pr:22.50,old:null,em:'📦',bg:'top',bt:'Top venda',cat:'roupas',rat:4.9,rv:891,un:'1,5kg',kg:1.6},
+  {id:3,nm:'Desinfetante Lavanda 2L',br:'Pinho Sol',pr:14.90,old:18.00,em:'🌿',bg:'promo',bt:'−17%',cat:'pisos',rat:4.6,rv:204,un:'2L',kg:2.1},
+  {id:4,nm:'Limpador Multiuso Spray 500ml',br:'Mr. Músculo',pr:11.90,old:null,em:'💪',bg:'new',bt:'Novo',cat:'banheiro',rat:4.7,rv:156,un:'500ml',kg:0.6},
+  {id:5,nm:'Amaciante Concentrado Primavera 2L',br:'Comfort',pr:18.90,old:24.00,em:'🌸',bg:'promo',bt:'−21%',cat:'roupas',rat:4.8,rv:543,un:'2L',kg:2.1},
+  {id:6,nm:'Esponja Dupla Face 3 unidades',br:'Scotch-Brite',pr:6.90,old:null,em:'🧽',bg:'top',bt:'Top venda',cat:'acessorios',rat:4.9,rv:1102,un:'3un',kg:0.1},
+  {id:7,nm:'Limpa Vidros Cristal 500ml',br:'Glass Plus',pr:9.90,old:13.50,em:'🪟',bg:'promo',bt:'−27%',cat:'cozinha',rat:4.5,rv:88,un:'500ml',kg:0.6},
+  {id:8,nm:'Tira-manchas Roupas Coloridas 1kg',br:'Vanish',pr:19.90,old:null,em:'👕',bg:'new',bt:'Novo',cat:'roupas',rat:4.7,rv:221,un:'1kg',kg:1.1},
+  {id:9,nm:'Cloro Concentrado 1L',br:'Qboa',pr:7.50,old:10.00,em:'💧',bg:'promo',bt:'−25%',cat:'banheiro',rat:4.4,rv:67,un:'1L',kg:1.1},
+  {id:10,nm:'Sabão Líquido Ecológico 1L',br:'Bioclub',pr:24.90,old:null,em:'🌱',bg:'new',bt:'Eco',cat:'eco',rat:4.9,rv:345,un:'1L',kg:1.1},
+  {id:11,nm:'Rodo com Cabo Telescópico',br:'Bettanin',pr:34.90,old:44.90,em:'🧹',bg:'promo',bt:'−22%',cat:'acessorios',rat:4.6,rv:178,un:'1un',kg:1.3},
+  {id:12,nm:'Pano Microfibra 40x40cm 5un',br:'3M',pr:29.90,old:null,em:'🎽',bg:'top',bt:'Top venda',cat:'acessorios',rat:4.8,rv:420,un:'5un',kg:0.3},
+];
+
+// ── COMBOS ────────────────────────────────────────────────
+const COMBOS = [
+  {nm:'Kit Banheiro Reluzente',ds:'Limpa box + Desinfetante + Escova sanitária + Luva',em:'🚿',old:79.90,pr:59.90,sv:'R$20'},
+  {nm:'Kit Lavanderia Completa',ds:'Sabão em pó + Amaciante + Tira-manchas + Pregadores',em:'👕',old:89.90,pr:67.90,sv:'R$22'},
+  {nm:'Kit Cozinha Brilhante',ds:'Detergente + Esponja 3un + Desentupidor + Limpa fogão',em:'🍽️',old:55.90,pr:39.90,sv:'R$16'},
+  {nm:'Kit Eco Casa Limpa',ds:'4 produtos linha sustentável com refis biodegradáveis',em:'🌱',old:119.90,pr:89.90,sv:'R$30'},
+  {nm:'Limpeza Total — 10 itens',ds:'Kit completo para todos os ambientes da casa',em:'🏠',old:199.90,pr:149.90,sv:'R$50'},
+];
+
+// ── DICAS ─────────────────────────────────────────────────
+const TIPS = [
+  {ic:'💡',tit:'Como tirar manchas difíceis de roupas',tx:'Aplique tira-manchas antes de lavar e deixe agir 10 min. Para gordura, use detergente neutro antes do sabão.'},
+  {ic:'🚿',tit:'Banheiro sempre higienizado',tx:'Desinfetante concentrado 1:4 para limpeza diária. Limpe o box com anti-fungo uma vez por semana.'},
+  {ic:'🍽️',tit:'Cozinha sem resíduos de gordura',tx:'Desengordurante antes de esfregar remove até 99% da gordura. Evite palha de aço em superfícies inox.'},
+  {ic:'🌱',tit:'Limpeza sustentável',tx:'Refis reduzem o plástico em até 80%. Bicarbonato + vinagre é ótima solução caseira para pisos.'},
+  {ic:'🏠',tit:'Ordem certa para limpar a casa',tx:'De cima para baixo: teto, paredes, móveis e por fim o piso. Aspire antes de passar pano úmido.'},
+  {ic:'👃',tit:'Elimine odores de verdade',tx:'Use desinfetante bactericida na fonte: lixeira, vaso e ralos. Borrife bicarbonato em estofados.'},
+];
+
+// ── AVALIAÇÕES ────────────────────────────────────────────
+const REVIEWS = [
+  {nm:'Ana Paula S.',dt:'12/04/2025',st:5,tx:'Recebi em 2 dias! O frete foi justo e os produtos ótimos. Super recomendo o MercadoLimpe!',pr:'Desinfetante Lavanda 2L'},
+  {nm:'Carlos M.',dt:'03/05/2025',st:5,tx:'Kit lavanderia valeu muito! Frete calculado certinho e entrega no prazo.',pr:'Kit Lavanderia Completa'},
+  {nm:'Fernanda L.',dt:'28/04/2025',st:4,tx:'Entrega pontual. Sabão Omo excelente, roupas ficaram limpíssimas mesmo na lavagem a frio.',pr:'Sabão em Pó Omo 1,5kg'},
+  {nm:'Roberto T.',dt:'20/04/2025',st:5,tx:'Virei cliente fiel! Preços melhores que no mercado físico e entregam em casa.',pr:'Kit Banheiro Reluzente'},
+  {nm:'Juliana B.',dt:'15/04/2025',st:5,tx:'Os panos de microfibra 3M são incríveis! Limpam sem precisar de produto extra.',pr:'Pano Microfibra 3M 5un'},
+];
+
+// ── PEDIDOS (mock) ────────────────────────────────────────
+const ORDERS = [
+  {num:'#ML-00412',st:'Entregue',sc:'sem',dt:'02/05/2025',it:'Desinfetante + Esponja + Detergente',tot:'R$31,70',fr:'R$5,00 · 1,2 km',steps:[1,1,1,1]},
+  {num:'#ML-00498',st:'Em trânsito',sc:'sde',dt:'06/05/2025',it:'Kit Lavanderia Completa',tot:'R$67,90',fr:'R$15,00 · Flex',steps:[1,1,1,0]},
+  {num:'#ML-00521',st:'Em separação',sc:'spr',dt:'07/05/2025',it:'Sabão em Pó Omo + Amaciante',tot:'R$41,40',fr:'R$7,00 · 3,0 km',steps:[1,1,0,0]},
+];
+
+// ── CATEGORIAS ────────────────────────────────────────────
+const CATS = [
+  {id:'todos',ic:'🧴',nm:'Todos'},
+  {id:'banheiro',ic:'🚿',nm:'Banheiro'},
+  {id:'roupas',ic:'👕',nm:'Roupas'},
+  {id:'cozinha',ic:'🍽️',nm:'Cozinha'},
+  {id:'pisos',ic:'🏠',nm:'Pisos'},
+  {id:'acessorios',ic:'🧽',nm:'Acess.'},
+  {id:'eco',ic:'🌱',nm:'Eco'},
+];
+
+// ── CLIENTES ADMIN (mock) ──────────────────────────────────
+const CLIENTS = [
+  {nm:'Ana Paula Santos',wa:'(11) 98765-4321',email:'ana@email.com',tipo:'Cadastrada'},
+  {nm:'Carlos Mendes',wa:'(11) 97654-3210',email:'',tipo:'Convidado'},
+  {nm:'Fernanda Lima',wa:'(11) 96543-2109',email:'fer@email.com',tipo:'Cadastrada'},
+  {nm:'Juliana Barros',wa:'(11) 95432-1098',email:'',tipo:'Convidado'},
+];
+
+const STEP_LABELS = ['Pedido','Separação','Transporte','Entregue'];
+
+</script>
+<script>
+// ── LÓGICA DE FRETE ───────────────────────────────────────
+// Entrega própria:
+//   - Até 2km → R$5,00 fixo
+//   - >2km → R$5,00 + R$2,00/km excedente
+//   - Raio máximo: 8,5 km
+//   - Cada frete comporta 40kg → nFretes = ceil(peso/40)
+//   - Total = nFretes × freteUnitario(km)
+//
+// Entrega Flex:
+//   - R$15,00 a cada 6kg → nFretes = ceil(peso/6)
+//   - Total = nFretes × R$15,00
+//   - Pedidos até 10h → próximo dia útil
+//   - Pedidos após 10h → segundo dia útil
+
+const fmt    = v  => 'R$ ' + v.toFixed(2).replace('.', ',');
+const fmtKg  = v  => v.toFixed(1).replace('.', ',') + ' kg';
+const ceilN  = v  => Math.ceil(v);
+
+function freteUnitarioPropria(km) {
+  return km <= 2 ? 5 : 5 + (km - 2) * 2;
+}
+
+function calcPropria(km, pesoKg) {
+  if (!km || km <= 0)  return { erro: 'Informe uma distância válida.' };
+  if (km > 8.5)        return { erro: `Distância de ${km.toFixed(1)} km fora do raio (máx. 8,5 km). Use a Entrega Flex.` };
+  if (pesoKg <= 0)     return { erro: 'Adicione produtos ao carrinho.' };
+
+  const nF    = ceilN(pesoKg / 40);
+  const unit  = parseFloat(freteUnitarioPropria(km).toFixed(2));
+  const total = parseFloat((nF * unit).toFixed(2));
+  const det   = km <= 2 ? 'taxa fixa ≤ 2 km' : `R$5,00 + R$${((km-2)*2).toFixed(2)} (${(km-2).toFixed(1)}km × R$2,00)`;
+
+  return { nF, unit, total, det, km, pesoKg };
+}
+
+function calcFlex(pesoKg) {
+  if (pesoKg <= 0) return { erro: 'Adicione produtos ao carrinho.' };
+  const nF    = ceilN(pesoKg / 6);
+  const total = parseFloat((nF * 15).toFixed(2));
+  return { nF, unit: 15, total, pesoKg };
+}
+
+// ── PRAZO FLEX ─────────────────────────────────────────────
+function calcPrazoFlex() {
+  const agora      = new Date();
+  const hora       = agora.getHours();
+  const minuto     = agora.getMinutes();
+  const diaSemana  = agora.getDay(); // 0=dom 6=sab
+  const noHorario  = hora < 10 || (hora === 10 && minuto === 0);
+  const diaUtil    = diaSemana >= 1 && diaSemana <= 5;
+
+  const diasNm  = ['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+  const mesesNm = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+  function proxDiaUtil(base, saltos) {
+    const d = new Date(base);
+    let count = 0;
+    while (count < saltos) {
+      d.setDate(d.getDate() + 1);
+      if (d.getDay() !== 0 && d.getDay() !== 6) count++;
+    }
+    return d;
+  }
+
+  let entrega, status, titulo, sub;
+
+  if (noHorario && diaUtil) {
+    entrega = proxDiaUtil(agora, 1);
+    status  = 'ok';
+    titulo  = 'Pedido dentro do prazo!';
+    sub     = `Peça agora e receba ${diasNm[entrega.getDay()]}, ${entrega.getDate()} de ${mesesNm[entrega.getMonth()]}`;
+  } else if (!noHorario && diaUtil) {
+    entrega = proxDiaUtil(agora, 2);
+    status  = 'late';
+    titulo  = 'Prazo encerrado por hoje';
+    sub     = `Pedidos após 10h entram amanhã. Previsão: ${diasNm[entrega.getDay()]}, ${entrega.getDate()} de ${mesesNm[entrega.getMonth()]}`;
+  } else {
+    entrega = proxDiaUtil(agora, 2);
+    status  = 'late';
+    titulo  = 'Estamos no fim de semana';
+    sub     = `Pedidos entram na segunda. Previsão: ${diasNm[entrega.getDay()]}, ${entrega.getDate()} de ${mesesNm[entrega.getMonth()]}`;
+  }
+
+  return { status, titulo, sub, entrega, diasNm, mesesNm };
+}
+
+// ── HTML HELPERS ───────────────────────────────────────────
+function cutoffHTML(elId) {
+  const r   = calcPrazoFlex();
+  const el  = document.getElementById(elId);
+  if (!el) return;
+  el.innerHTML = `
+    <div class="cutoff-strip ${r.status}">
+      <div class="cutoff-ic">${r.status === 'ok' ? '✅' : '⏳'}</div>
+      <div>
+        <div class="cutoff-title">${r.titulo}</div>
+        <div class="cutoff-sub">${r.sub}</div>
+      </div>
+    </div>`;
+  return r;
+}
+
+function bdRowsHTML(rows) {
+  return rows.map((r, i) =>
+    `<div class="bd-row">${
+      i === rows.length - 1
+        ? `<span>${r[0]}</span><span>${r[1]}</span>`
+        : `<span>${r[0]}</span><span>${r[1]}</span>`
+    }</div>`
+  ).join('');
+}
+
+function propResultHTML(r) {
+  return `
+    <div class="fres fok" style="display:block">Frete calculado: <strong>${fmt(r.total)}</strong></div>
+    <div class="breakdown show">
+      <div class="bd-tit">Como foi calculado</div>
+      ${bdRowsHTML([
+        ['Distância',                                                   `${r.km.toFixed(1)} km`],
+        ['Valor por frete (40 kg)',                                      `${fmt(r.unit)} — ${r.det}`],
+        ['Peso do pedido',                                              fmtKg(r.pesoKg)],
+        [`Fretes necessários (${fmtKg(r.pesoKg)} ÷ 40 kg)`,           `<span class="bd-pill">${r.nF}x</span>`],
+        ['Total do frete',                                              fmt(r.total)],
+      ])}
+    </div>`;
+}
+
+function flexResultHTML(r) {
+  return `
+    <div class="fres fok" style="display:block">Frete calculado: <strong>${fmt(r.total)}</strong></div>
+    <div class="breakdown show">
+      <div class="bd-tit">Como foi calculado</div>
+      ${bdRowsHTML([
+        ['Taxa por frete (6 kg)',                                        'R$ 15,00'],
+        ['Peso do pedido',                                              fmtKg(r.pesoKg)],
+        [`Fretes necessários (${fmtKg(r.pesoKg)} ÷ 6 kg)`,            `<span class="bd-pill">${r.nF}x</span>`],
+        ['Total do frete',                                              fmt(r.total)],
+      ])}
+    </div>`;
+}
+
+</script>
+<script>
+// ── ESTADO GLOBAL ─────────────────────────────────────────
+let cart        = {};
+let curCat      = 'todos';
+let curSort     = 'rel';
+let freteMode   = 'propria';
+let freteVal    = null;
+let freteOk     = false;
+let payMode     = 'pix';
+let guestUser   = null;
+let orderCount  = 521;
+
+// ── HELPERS ───────────────────────────────────────────────
+const pesoTotal = () => Object.keys(cart).reduce((s, id) => {
+  const p = PRODS.find(x => x.id == id);
+  return s + (p ? p.kg * (cart[id] || 0) : 0);
+}, 0);
+
+const subTotal = () => Object.keys(cart).reduce((s, id) => {
+  const p = PRODS.find(x => x.id == id);
+  return s + (p ? p.pr * (cart[id] || 0) : 0);
+}, 0);
+
+const stars = r => {
+  const f = Math.round(r);
+  return '★'.repeat(f) + '☆'.repeat(5 - f);
+};
+
+// ── NAVEGAÇÃO ─────────────────────────────────────────────
+function go(sid) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
+  document.getElementById(sid).classList.add('on');
+}
+
+function goApp() { go('s-main'); }
+
+function goAppGuest() {
+  const nm = document.getElementById('g-nome').value.trim();
+  const wa = document.getElementById('g-wa').value.trim();
+  if (!nm || !wa) { alert('Por favor preencha nome e WhatsApp!'); return; }
+  guestUser = { nome: nm, wa };
+  go('s-main');
+}
+
+function goAdmin() { renderAdmin(); go('s-admin'); }
+
+// ── ABAS ──────────────────────────────────────────────────
+const tabMap = {
+  home:     'tab-home',
+  products: 'tab-products',
+  combos:   'tab-combos',
+  tips:     'tab-tips',
+  reviews:  'tab-reviews',
+  orders:   'tab-orders',
+};
+
+function tab(name, tabEl, niId) {
+  Object.values(tabMap).forEach(id => { document.getElementById(id).style.display = 'none'; });
+  document.getElementById(tabMap[name]).style.display = 'block';
+
+  if (tabEl) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+    tabEl.classList.add('on');
+  }
+  if (niId) {
+    document.querySelectorAll('.ni').forEach(n => n.classList.remove('on'));
+    document.getElementById(niId).classList.add('on');
+  }
+
+  if (name === 'products') renderProds();
+  if (name === 'combos')   renderCombos();
+  if (name === 'tips')     renderTips();
+  if (name === 'reviews')  renderReviews();
+  if (name === 'orders')   renderOrders();
+}
+
+// ── CATEGORIAS & SORT ─────────────────────────────────────
+function buildCats() {
+  document.getElementById('cats').innerHTML = CATS.map(c =>
+    `<div class="cat${c.id === 'todos' ? ' on' : ''}" onclick="fcat(this,'${c.id}')">
+       <div class="catic">${c.ic}</div><span>${c.nm}</span>
+     </div>`
+  ).join('');
+}
+
+function fcat(el, cat) {
+  curCat = cat;
+  document.querySelectorAll('.cat').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  renderProds();
+}
+
+function srt(el, s) {
+  curSort = s;
+  document.querySelectorAll('.schip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  renderProds();
+}
+
+// ── BUSCA ─────────────────────────────────────────────────
+function searchProds(q) {
+  if (q.trim()) {
+    tab('products', document.querySelectorAll('.tab')[1]);
+  }
+  renderProds(q.trim().toLowerCase());
+}
+
+// ── RENDER PRODUTOS ───────────────────────────────────────
+function renderProds(search = '') {
+  let list = [...PRODS];
+  if (curCat !== 'todos')  list = list.filter(p => p.cat === curCat);
+  if (search)              list = list.filter(p => p.nm.toLowerCase().includes(search) || p.br.toLowerCase().includes(search));
+  if (curSort === 'asc')   list.sort((a, b) => a.pr - b.pr);
+  else if (curSort === 'desc') list.sort((a, b) => b.pr - a.pr);
+  else if (curSort === 'rat')  list.sort((a, b) => b.rat - a.rat);
+  else if (curSort === 'promo') list = [...list.filter(p => p.old), ...list.filter(p => !p.old)];
+
+  document.getElementById('pgrid').innerHTML = list.map(p => `
+    <div class="pcard" onclick="addCart(${p.id})">
+      <div class="pbg b${p.bg}">${p.bt}</div>
+      <button class="pfav" onclick="event.stopPropagation()" aria-label="Favoritar">♡</button>
+      <span class="pem">${p.em}</span>
+      <div class="pnm">${p.nm}</div>
+      <div class="pbr">${p.br} · ${p.un} · ${p.kg}kg</div>
+      <div class="prat"><span class="pst">${stars(p.rat)}</span><span class="prv">${p.rat} (${p.rv})</span></div>
+      <div class="pfoot">
+        <div>
+          ${p.old ? `<div class="pold">R$${p.old.toFixed(2)}</div>` : '<div style="height:12px"></div>'}
+          <div class="ppr">R$${p.pr.toFixed(2)}</div>
+        </div>
+        <button class="addbtn" aria-label="Adicionar">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function renderCombos() {
+  document.getElementById('combos-el').innerHTML = COMBOS.map(c => `
+    <div class="ccard">
+      <div style="font-size:28px">${c.em}</div>
+      <div class="cinfo">
+        <div class="cnm">${c.nm}</div>
+        <div class="cds">${c.ds}</div>
+        <div class="cpr">
+          <span class="cold">R$${c.old.toFixed(2)}</span>
+          <span class="cnew">R$${c.pr.toFixed(2)}</span>
+          <span class="csv">−${c.sv}</span>
+        </div>
+      </div>
+      <button class="cadd" onclick="alert('Combo ${c.nm} adicionado!')">Adicionar</button>
+    </div>`).join('');
+}
+
+function renderTips() {
+  document.getElementById('tips-el').innerHTML = TIPS.map(t => `
+    <div class="tcard">
+      <div class="tic">${t.ic}</div>
+      <div><div class="ttit">${t.tit}</div><div class="ttx">${t.tx}</div></div>
+    </div>`).join('');
+}
+
+function renderReviews() {
+  document.getElementById('reviews-el').innerHTML = REVIEWS.map(r => `
+    <div class="rcard">
+      <div class="rhdr">
+        <div class="rav">${r.nm.split(' ').map(n => n[0]).slice(0, 2).join('')}</div>
+        <div><div class="rnm">${r.nm}</div><div class="rdt">${r.dt}</div></div>
+      </div>
+      <div class="rst">${'★'.repeat(r.st)}${'☆'.repeat(5 - r.st)}</div>
+      <div class="rtx">${r.tx}</div>
+      <div class="rpr">Produto: ${r.pr}</div>
+    </div>`).join('');
+}
+
+function renderOrders() {
+  document.getElementById('orders-el').innerHTML = ORDERS.map(o => `
+    <div class="ocard">
+      <div class="ohdr"><div class="onum">${o.num}</div><div class="ost ${o.sc}">${o.st}</div></div>
+      <div class="odt">${o.dt}</div>
+      <div class="oit">${o.it}</div>
+      <div class="otot">${o.tot} <span style="font-size:9px;color:var(--tx2)">· Frete ${o.fr}</span></div>
+      <div class="otrk">${STEP_LABELS.map((l, i) => {
+        const d = o.steps[i];
+        const c = d && !o.steps[i + 1];
+        return `<div class="trst${d ? ' done' : ''}">
+          <div class="trdot${d ? (c ? ' curr' : ' done') : ''}">${d ? '✓' : ''}</div>
+          <div class="trlbl">${l}</div>
+        </div>`;
+      }).join('')}</div>
+    </div>`).join('');
+}
+
+// ── ADMIN ─────────────────────────────────────────────────
+function renderAdmin() {
+  document.getElementById('adm-orders').innerHTML = ORDERS.map(o => `
+    <div class="ord-row">
+      <div class="ord-info">
+        <div class="ord-nm">${o.num} — ${CLIENTS[0].nm}</div>
+        <div class="ord-dt2">${o.it} · ${o.tot} · ${o.dt} · Frete ${o.fr}</div>
+        <div style="margin-top:3px"><span class="ost ${o.sc}">${o.st}</span></div>
+      </div>
+      <button class="ord-wa"><i class="ti ti-brand-whatsapp" style="font-size:12px"></i> Contatar</button>
+    </div>`).join('');
+
+  document.getElementById('adm-clients').innerHTML = CLIENTS.map(c => `
+    <div class="cli-row">
+      <div class="cli-av">${c.nm.split(' ').map(n => n[0]).slice(0, 2).join('')}</div>
+      <div class="cli-info">
+        <div class="cli-nm">${c.nm}</div>
+        <div class="cli-wa">${c.wa}${c.email ? ' · ' + c.email : ''}</div>
+      </div>
+      <span class="cli-type ${c.tipo === 'Cadastrada' ? 'ctcad' : 'ctgue'}">${c.tipo}</span>
+    </div>`).join('');
+
+  document.getElementById('adm-prods').innerHTML = PRODS.slice(0, 5).map(p => `
+    <div class="prod-row">
+      <div class="prod-em2">${p.em}</div>
+      <div class="prod-info">
+        <div class="prod-nm2">${p.nm}</div>
+        <div class="prod-st" style="color:var(--g)">Ativo · R$${p.pr.toFixed(2)}</div>
+      </div>
+      <div class="prod-act">
+        <button class="prod-btn">Editar</button>
+        <button class="prod-btn" style="color:var(--danger);border-color:var(--danger)">Pausar</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── CARRINHO ──────────────────────────────────────────────
+function addCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  resetFrete();
+  updBadge();
+  // feedback visual
+  const btn = event.currentTarget;
+  btn.style.transform = 'scale(1.3)';
+  setTimeout(() => { btn.style.transform = ''; }, 200);
+}
+
+function updBadge() {
+  document.getElementById('cc').textContent = Object.values(cart).reduce((a, b) => a + b, 0);
+}
+
+function openCart() {
+  document.getElementById('cov').classList.add('open');
+  document.getElementById('cdrw').classList.add('open');
+  renderCart();
+}
+
+function closeCart() {
+  document.getElementById('cov').classList.remove('open');
+  document.getElementById('cdrw').classList.remove('open');
+}
+
+function chgQty(id, d) {
+  cart[id] = Math.max(0, (cart[id] || 0) + d);
+  if (cart[id] <= 0) delete cart[id];
+  resetFrete();
+  updBadge();
+  renderCart();
+}
+
+function renderCart() {
+  const ks  = Object.keys(cart);
+  const el  = document.getElementById('citems');
+  const fb  = document.getElementById('fbox');
+
+  if (!ks.length) {
+    el.innerHTML = '<div class="ecart"><div class="ecic">🛒</div><p>Carrinho vazio</p></div>';
+    fb.style.display = 'none';
+    document.getElementById('csum').innerHTML = '';
+    return;
+  }
+
+  el.innerHTML = ks.map(id => {
+    const p = PRODS.find(x => x.id == id);
+    const q = cart[id];
+    return `<div class="ci">
+      <div class="ciem">${p.em}</div>
+      <div class="cii">
+        <div class="cinm">${p.nm}</div>
+        <div class="cibr">${p.br} · ${p.un} · ${p.kg}kg/un</div>
+        <div class="cipr">${fmt(p.pr * q)}</div>
+      </div>
+      <div class="qty">
+        <button class="qb" onclick="chgQty(${id},-1)">−</button>
+        <span class="qn">${q}</span>
+        <button class="qb" onclick="chgQty(${id},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  fb.style.display = 'block';
+  document.getElementById('cart-peso').value = fmtKg(pesoTotal());
+
+  if (freteMode === 'flex') {
+    cartCalcFlex();
+  }
+
+  renderCartSummary();
+}
+
+// ── FRETE NO CARRINHO ─────────────────────────────────────
+function resetFrete() {
+  freteVal = null;
+  freteOk  = false;
+}
+
+function cartSelFrete(m) {
+  freteMode = m;
+  resetFrete();
+  document.getElementById('cart-fop-propria').classList.toggle('on', m === 'propria');
+  document.getElementById('cart-fop-flex').classList.toggle('on', m === 'flex');
+  document.getElementById('cart-box-propria').style.display = m === 'propria' ? 'block' : 'none';
+  document.getElementById('cart-box-flex').style.display    = m === 'flex'    ? 'block' : 'none';
+  document.getElementById('cart-fres').className = 'fres';
+  document.getElementById('cart-fres').style.display = 'none';
+  document.getElementById('cart-bd').classList.remove('show');
+  if (m === 'flex') cartCalcFlex();
+  renderCartSummary();
+}
+
+function cartCalcPropria() {
+  const km   = parseFloat(document.getElementById('cart-km').value);
+  const peso = pesoTotal();
+  const r    = calcPropria(km, peso);
+  const el   = document.getElementById('cart-fres');
+  const bd   = document.getElementById('cart-bd');
+  const bdr  = document.getElementById('cart-bd-rows');
+
+  if (r.erro) {
+    el.className = 'fres ferr'; el.style.display = 'block'; el.textContent = r.erro;
+    freteVal = null; freteOk = false; renderCartSummary(); return;
+  }
+
+  freteVal = r.total; freteOk = true;
+  el.className = 'fres fok'; el.style.display = 'block';
+  el.innerHTML = `Frete calculado: <strong>${fmt(r.total)}</strong>`;
+  bdr.innerHTML = bdRowsHTML([
+    ['Distância', `${r.km.toFixed(1)} km`],
+    ['Valor por frete (40 kg)', `${fmt(r.unit)}`],
+    ['Peso do pedido', fmtKg(r.pesoKg)],
+    [`Fretes (${fmtKg(r.pesoKg)} ÷ 40 kg)`, `<span class="bd-pill">${r.nF}x</span>`],
+    ['Total', fmt(r.total)],
+  ]);
+  bd.classList.add('show');
+  renderCartSummary();
+}
+
+function cartCalcFlex() {
+  const peso = pesoTotal();
+  const r    = calcFlex(peso);
+  const el   = document.getElementById('cart-fres');
+  const bd   = document.getElementById('cart-bd');
+  const bdr  = document.getElementById('cart-bd-rows');
+  const prazo = cutoffHTML('cart-cutoff');
+
+  if (r.erro) {
+    el.className = 'fres ferr'; el.style.display = 'block'; el.textContent = r.erro;
+    freteVal = null; freteOk = false; renderCartSummary(); return;
+  }
+
+  freteVal = r.total; freteOk = true;
+  el.className = 'fres fok'; el.style.display = 'block';
+  el.innerHTML = `Frete calculado: <strong>${fmt(r.total)}</strong>`;
+  bdr.innerHTML = bdRowsHTML([
+    ['Taxa por frete (6 kg)', 'R$ 15,00'],
+    ['Peso do pedido', fmtKg(r.pesoKg)],
+    [`Fretes (${fmtKg(r.pesoKg)} ÷ 6 kg)`, `<span class="bd-pill">${r.nF}x</span>`],
+    ['Total', fmt(r.total)],
+  ]);
+  bd.classList.add('show');
+
+  // prazo no cart
+  if (prazo) {
+    document.getElementById('cart-prazo').textContent =
+      `${prazo.diasNm[prazo.entrega.getDay()]}, ${prazo.entrega.getDate()}/${prazo.entrega.getMonth()+1}`;
+  }
+
+  renderCartSummary();
+}
+
+function renderCartSummary() {
+  const ks  = Object.keys(cart);
+  if (!ks.length) return;
+  const sub = subTotal();
+
+  let freteStr, totalStr, canFinish = false;
+  if (freteOk && freteVal !== null) {
+    freteStr  = fmt(freteVal);
+    totalStr  = `<strong>${fmt(sub + freteVal)}</strong>`;
+    canFinish = true;
+  } else {
+    freteStr = '<span style="color:rgba(255,255,255,.4);font-size:10px">A calcular</span>';
+    totalStr = '<span style="color:rgba(255,255,255,.4);font-size:12px">—</span>';
+  }
+
+  document.getElementById('csum').innerHTML = `
+    <div class="csum-box">
+      <div class="csum-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+      <div class="csum-row"><span>Modalidade</span><span>${freteMode === 'propria' ? 'Entrega própria' : 'Entrega Flex'}</span></div>
+      <div class="csum-row"><span>Frete</span><span>${freteStr}</span></div>
+      <div class="csum-row fin"><span>Total</span><span>${totalStr}</span></div>
+    </div>
+    <button class="csum-btn" ${canFinish ? '' : 'disabled'} onclick="${canFinish ? 'goCheckout()' : ''}">
+      ${canFinish ? 'Finalizar pedido' : 'Calcule o frete para continuar'}
+    </button>`;
+}
+
+// ── CHECKOUT ──────────────────────────────────────────────
+function goCheckout() {
+  closeCart();
+
+  // preenche peso
+  document.getElementById('peso-inp').value = fmtKg(pesoTotal());
+  document.getElementById('ck-sub-val').textContent  = fmt(subTotal());
+  document.getElementById('ck-tipo-val').textContent = freteMode === 'propria' ? 'Entrega própria' : 'Entrega Flex';
+
+  // preenche se convidado
+  if (guestUser) {
+    document.getElementById('ck-nome').value = guestUser.nome;
+    document.getElementById('ck-wa').value   = guestUser.wa;
+  }
+
+  // modo de frete
+  selFrete(freteMode);
+
+  // se flex já calculado, mostra resultado
+  if (freteMode === 'flex' && freteOk) {
+    document.getElementById('ck-frete-val').textContent = fmt(freteVal);
+    document.getElementById('ck-total-val').innerHTML   = `<strong>${fmt(subTotal() + freteVal)}</strong>`;
+    document.getElementById('ck-submit').disabled = false;
+  }
+
+  go('s-checkout');
+}
+
+function selFrete(m) {
+  freteMode = m;
+  document.getElementById('fop-propria').classList.toggle('on', m === 'propria');
+  document.getElementById('fop-flex').classList.toggle('on', m === 'flex');
+  document.getElementById('box-propria').style.display = m === 'propria' ? 'block' : 'none';
+  document.getElementById('box-flex').style.display    = m === 'flex'    ? 'block' : 'none';
+
+  if (m === 'flex') {
+    const prazo = cutoffHTML('cutoff-strip');
+    if (prazo) {
+      document.getElementById('prazo-label').textContent =
+        `${prazo.diasNm[prazo.entrega.getDay()]}, ${prazo.entrega.getDate()}/${prazo.entrega.getMonth()+1}`;
+      document.getElementById('ck-prazo-lbl').style.display = 'block';
+      document.getElementById('ck-prazo-val').style.display = 'block';
+      document.getElementById('ck-prazo-val').textContent =
+        `${prazo.diasNm[prazo.entrega.getDay()]}, ${prazo.entrega.getDate()} de ${prazo.mesesNm[prazo.entrega.getMonth()]}`;
+      // calcula frete flex automaticamente
+      const r = calcFlex(pesoTotal());
+      if (!r.erro) {
+        freteVal = r.total; freteOk = true;
+        document.getElementById('res-flex').className   = 'fres fok';
+        document.getElementById('res-flex').style.display = 'block';
+        document.getElementById('res-flex').innerHTML   = `Frete calculado: <strong>${fmt(r.total)}</strong>`;
+        document.getElementById('bd-flex-rows').innerHTML = bdRowsHTML([
+          ['Taxa por frete (6 kg)', 'R$ 15,00'],
+          ['Peso do pedido', fmtKg(r.pesoKg)],
+          [`Fretes (${fmtKg(r.pesoKg)} ÷ 6 kg)`, `<span class="bd-pill">${r.nF}x</span>`],
+          ['Total', fmt(r.total)],
+        ]);
+        document.getElementById('bd-flex').classList.add('show');
+        updateCkTotal();
+      }
+    }
+  } else {
+    document.getElementById('ck-prazo-lbl').style.display = 'none';
+    document.getElementById('ck-prazo-val').style.display = 'none';
+  }
+}
+
+function calcPropria() {
+  const km   = parseFloat(document.getElementById('km-inp').value);
+  const peso = pesoTotal();
+  const r    = window.calcPropria ? window.calcPropria(km, peso) : calcPropriaFn(km, peso);
+
+  if (r.erro) {
+    document.getElementById('res-propria').className     = 'fres ferr';
+    document.getElementById('res-propria').style.display = 'block';
+    document.getElementById('res-propria').textContent   = r.erro;
+    freteVal = null; freteOk = false; updateCkTotal(); return;
+  }
+
+  freteVal = r.total; freteOk = true;
+  document.getElementById('res-propria').className     = 'fres fok';
+  document.getElementById('res-propria').style.display = 'block';
+  document.getElementById('res-propria').innerHTML     = `Frete calculado: <strong>${fmt(r.total)}</strong>`;
+  document.getElementById('bd-propria-rows').innerHTML = bdRowsHTML([
+    ['Distância', `${r.km.toFixed(1)} km`],
+    ['Valor por frete (40 kg)', fmt(r.unit)],
+    ['Peso do pedido', fmtKg(r.pesoKg)],
+    [`Fretes (${fmtKg(r.pesoKg)} ÷ 40 kg)`, `<span class="bd-pill">${r.nF}x</span>`],
+    ['Total', fmt(r.total)],
+  ]);
+  document.getElementById('bd-propria').classList.add('show');
+  updateCkTotal();
+}
+
+function updateCkTotal() {
+  const sub = subTotal();
+  if (freteOk && freteVal !== null) {
+    document.getElementById('ck-frete-val').textContent = fmt(freteVal);
+    document.getElementById('ck-total-val').innerHTML   = `<strong>${fmt(sub + freteVal)}</strong>`;
+    document.getElementById('ck-submit').disabled = false;
+  } else {
+    document.getElementById('ck-frete-val').innerHTML = '<span style="color:rgba(255,255,255,.5);font-size:10px">A calcular</span>';
+    document.getElementById('ck-total-val').innerHTML = '<span style="color:rgba(255,255,255,.5)">—</span>';
+    document.getElementById('ck-submit').disabled = true;
+  }
+}
+
+function selPay(m) {
+  payMode = m;
+  document.getElementById('pay-pix').classList.toggle('on', m === 'pix');
+  document.getElementById('pay-card').classList.toggle('on', m === 'card');
+  document.getElementById('pay-pix-box').style.display  = m === 'pix'  ? 'block' : 'none';
+  document.getElementById('pay-card-box').style.display = m === 'card' ? 'block' : 'none';
+}
+
+function submitOrder() {
+  const nm = document.getElementById('ck-nome').value.trim();
+  const wa = document.getElementById('ck-wa').value.trim();
+  if (!nm || !wa) { alert('Preencha nome e WhatsApp!'); return; }
+  if (!freteOk)   { alert('Calcule o frete antes de confirmar!'); return; }
+
+  // salva cliente no localStorage
+  const cliente = {
+    nome:  nm,
+    wa,
+    email: document.getElementById('ck-email').value.trim(),
+    data:  new Date().toLocaleDateString('pt-BR'),
+    pedido: `#ML-${String(++orderCount).padStart(5, '0')}`,
+    total: fmt(subTotal() + freteVal),
+    frete: freteMode,
+  };
+  const clientes = JSON.parse(localStorage.getItem('ml_clientes') || '[]');
+  clientes.push(cliente);
+  localStorage.setItem('ml_clientes', JSON.stringify(clientes));
+
+  document.getElementById('succ-num').textContent     = cliente.pedido;
+  document.getElementById('succ-pay-val').textContent = payMode === 'pix' ? 'Pix — aguarde confirmação' : 'Cartão de crédito/débito';
+
+  cart = {}; updBadge(); resetFrete();
+  go('s-success');
+}
+
+// ── MODAL INFORMAÇÕES ─────────────────────────────────────
+function openInfo() {
+  const prazo = calcPrazoFlex();
+
+  document.getElementById('modal-body-content').innerHTML = `
+    <div class="info-sec">
+      <div class="info-sec-hdr">
+        <span class="info-sec-ic">🛵</span>
+        <div><div class="info-sec-tit">Entrega própria</div><div class="info-sec-sub">Raio de até 8,5 km</div></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tit">Como o frete é calculado</div>
+        <div class="info-card-txt">
+          · Até <span class="hl">2 km</span> → <span class="hl">R$ 5,00</span><br/>
+          · Acima de 2 km → R$ 5,00 + <span class="hl">R$ 2,00/km</span> excedente
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tit">Limite de peso por frete</div>
+        <div class="info-card-txt">Cada frete comporta até <span class="hl">40 kg</span>. Pedidos maiores são divididos em múltiplos fretes automaticamente.</div>
+        <div class="example-box">
+          <div class="ex-tit">Exemplos — distância 3 km (frete: R$7,00)</div>
+          <div class="ex-row"><span>20 kg</span><span>1 frete · R$ 7,00</span></div>
+          <div class="ex-row"><span>80 kg</span><span>2 fretes · R$ 14,00</span></div>
+          <div class="ex-row"><span>160 kg</span><span>4 fretes · R$ 28,00</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-sec">
+      <div class="info-sec-hdr">
+        <span class="info-sec-ic">📦</span>
+        <div><div class="info-sec-tit">Entrega Flex</div><div class="info-sec-sub">Toda a Grande São Paulo</div></div>
+      </div>
+      <div class="hora-card">
+        <div class="hora-ic">⏰</div>
+        <div>
+          <div class="hora-val">até 10h00</div>
+          <div class="hora-sub">Pedidos feitos até esse horário → entregues no próximo dia útil</div>
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tit">Prazo de entrega</div>
+        <div class="info-card-txt">
+          Pedidos feitos até as <span class="hl">10h00</span> → entregues no <span class="hl">próximo dia útil</span>.<br/>
+          Pedidos após as 10h00 → entregues no <span class="hl">segundo dia útil</span>.
+        </div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-tit">Como o frete é calculado</div>
+        <div class="info-card-txt">Taxa fixa de <span class="hl">R$ 15,00</span> a cada <span class="hl">6 kg</span>.</div>
+        <div class="example-box">
+          <div class="ex-tit">Exemplos</div>
+          <div class="ex-row"><span>Até 6 kg</span><span>1 frete · R$ 15,00</span></div>
+          <div class="ex-row"><span>7 kg</span><span>2 fretes · R$ 30,00</span></div>
+          <div class="ex-row"><span>30 kg</span><span>5 fretes · R$ 75,00</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-sec">
+      <div class="info-sec-hdr">
+        <span class="info-sec-ic">💬</span>
+        <div><div class="info-sec-tit">Dúvidas frequentes</div></div>
+      </div>
+      ${[
+        ['Se eu pedir às 11h, quando chega?', 'Pedidos após as 10h entram na fila do próximo dia. A entrega ocorre no segundo dia útil.'],
+        ['O Flex entrega aos sábados?', 'O prazo conta apenas dias úteis (segunda a sexta). Pedidos na sexta após 10h → entregues na terça.'],
+        ['Moro fora do raio de 8,5 km. Tenho opção?', 'Sim! A Entrega Flex cobre toda a Grande São Paulo sem limite de distância.'],
+        ['Por que o frete é por peso?', 'Cada entrega tem capacidade máxima por segurança. Pedidos maiores exigem mais capacidade, por isso o frete é proporcional.'],
+      ].map(([q, a]) => `
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">${q}<i class="ti ti-chevron-down"></i></button>
+          <div class="faq-a">${a}</div>
+        </div>`).join('')}
+    </div>`;
+
+  document.getElementById('modal-ov').classList.add('open');
+}
+
+function closeInfo(e) {
+  if (!e || e.target === document.getElementById('modal-ov'))
+    document.getElementById('modal-ov').classList.remove('open');
+}
+
+function toggleFaq(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+// ── INIT ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  buildCats();
+  renderProds();
+});
+
+</script>
+</body>
+</html>
